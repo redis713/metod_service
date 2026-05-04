@@ -1,5 +1,6 @@
 import io
 from flask import Flask, render_template, request, flash, send_file, redirect, url_for, Response, session
+from flask_migrate import Migrate
 from config import Config
 from models import db, Methodichka, User, Acknowledgement
 from datetime import datetime
@@ -10,6 +11,7 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 db.init_app(app)
+migrate = Migrate(app, db)
 #csrf = CSRFProtect(app)
 
 
@@ -209,6 +211,6 @@ def inject_user():
 
 
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-    app.run(debug=True)
+    #with app.app_context():
+    #    db.create_all()
+    app.run(debug=False)
