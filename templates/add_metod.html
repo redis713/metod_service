@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Добавить методичку{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Добавить методичку</h1>
+
+    <form method="post" enctype="multipart/form-data">
+
+        <label for="number_theme"> Номер темы: </label>
+        <input type="text" id="number_theme" name="number_theme" required>
+
+        <label for="title"> Название темы: </label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="author_id"> Автор: </label>
+        <select id="author_id" name="author_id" required>
+        <option value=""> Выберите автора </option>
+        {% for user in users %}
+        <option value="{{ user.id }}"> {{ user.full_name }} </option>
+        {% endfor %}
+        </select>
+
+        <label for="recenzent_id"> Рецензент: </label>
+        <select id="recenzent_id" name="recenzent_id" required>
+        <option value=""> Выберите рецензента </option>
+        {% for user in users %}
+        <option value="{{ user.id }}"> {{ user.full_name }} </option>
+        {% endfor %}
+        </select>
+
+        <label for="file"> Файл Word: </label>
+        <input type="file"  id="file" name="file" accept=".doc,.docx" required>
+
+        <label for="notes"> Замечания: </label>
+        <textarea id="notes" name="notes" rows="5"></textarea>
+
+        <button type="submit"> Добавить </button>
+
+    </form>
+</div>
+{% endblock %}

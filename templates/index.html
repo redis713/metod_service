@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<ol>
+{% for metod in all_metods %}
+    <li><a href="open_metod/{{metod.id}}">{{ metod.title }}</a></li>
+{% endfor %}
+</ol>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+
+<div class="card">
+    <form method="post" enctype="multipart/form-data">
+        <label for="login"> Логин: </label>
+        <input type="text" id="login" name="login" required>
+
+        <label for="password"> Пароль </label>
+        <input type="text" id="password" name="password" required>
+
+        <button type="submit"> Вход </button>
+    </form>
+</div>
+{% endblock %}

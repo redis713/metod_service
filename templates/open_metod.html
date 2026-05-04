@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}{{ metod.title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>{{ metod.title }}</h1>
+
+
+
+    <div class="bfg">
+    <form id="change_form" method="POST" enctype="multipart/form-data" action="{{ url_for('open_metod', metod_id=metod.id) }}">
+
+        <label for="number_theme"> Номер темы: </label>
+        <input type="text" id="number_theme" name="number_theme" value="{{metod.number_theme}}" required>
+
+        <label for="title"> Название темы: </label>
+        <input type="text" id="title" name="title" value="{{metod.title}}" required>
+
+        <label for="author_id"> Автор: </label>
+        <select id="author_id" name="author_id" required>
+        <option value="{{metod.author_id}}"> {{author_name}} </option>
+        {% for user in users %}
+        <option value="{{ user.id }}"> {{ user.full_name }} </option>
+        {% endfor %}
+        </select>
+
+        <label for="recenzent_id"> Рецензент: </label>
+        <select id="recenzent_id" name="recenzent_id" required>
+        <option value="{{metod.recenzent_id}}"> {{recenzent_name}} </option>
+        {% for user in users %}
+        <option value="{{ user.id }}"> {{ user.full_name }} </option>
+        {% endfor %}
+        </select>
+
+        <label for="file"> Файл Word: </label>
+        <input type="file"  id="file" name="file" accept=".doc,.docx">
+
+        <label for="notes"> Замечания: </label>
+        <textarea id="notes" name="notes" rows="5" >{{metod.notes}}</textarea>
+
+        <button type="button" onclick="change_metod()"> Изменить </button>
+            {% if current_user.isAdmin %}
+               <button type="button" onclick="delete_metod()"> Удалить </button>
+            {% endif %}
+
+        <!--a href="ms-word:ofe|u|http://localhost:5000/open_metod/{{ metod.id }}/file/{{ metod.filename }}"-->
+        <a href="ms-word:ofe|u|{{ url_for('get_file', metod_id=metod.id, filename=metod.filename, _external=True) }}">
+
+
+    <button type="button">
+        Открыть в Word
+    </button>
+</a>
+
+    </form>
+
+    <form id="delete_form"
+          method="POST"
+          action="{{ url_for('delete_metod', metod_id=metod.id) }}">
+    </form>
+
+    <div class="galochki">
+
+     {% for user in users %}
+
+    {% set ack = acknowledgements.get(user.id) %}
+
+    <div class="check_name_time">
+        <div class="name">{{ user.full_name }}</div>
+
+        <div class="check">
+        <form class="galochka_form" method="POST"
+              action="{{ url_for('acknowledge', metod_id=metod.id) }}"
+              style="display:inline;">
+
+            <input type="checkbox"
+                   name="ack"
+                   {% if ack %}checked disabled{% endif %}
+                   {% if not current_user or current_user.id != user.id %}disabled{% endif %}
+                   onchange="confirmAck()">
+        </form>
+        </div>
+
+        {% if ack %}
+            <div class="time">
+            <span>{{ ack.acknowledged_at.strftime('%d.%m.%Y %H:%M') }}</span>
+            </div>
+        {% endif %}
+    </div>
+
+{% endfor %}
+
+
+    </div>
+    </div>
+</div>
+{% endblock %}
