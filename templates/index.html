@@ -4,7 +4,7 @@
 
 <ol>
 {% for metod in all_metods %}
-    <li><a href="open_metod/{{metod.id}}">{{ metod.title }}</a></li>
+    <li><a href="open_metod/{{metod.id}}">{{ metod.number_theme }}: {{ metod.title }}</a></li>
 {% endfor %}
 </ol>
 {% endblock %}

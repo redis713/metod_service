@@ -24,6 +24,9 @@ def index():
 
 @app.route("/add_metod", methods=["GET", "POST"])
 def add_metod():
+    user = get_current_user()
+    if not user:
+        return redirect(url_for("login"))
 
     if request.method == "POST":
         number_theme = request.form.get("number_theme")
@@ -59,7 +62,10 @@ def open_metod(metod_id):
     metod = Methodichka.query.get(metod_id)
 
     if request.method == 'POST':
-        print('изменение метода')
+        user = get_current_user()
+        if not user:
+            return redirect(url_for("login"))
+
         metod.number_theme = request.form['number_theme']
         metod.title = request.form['title']
         metod.author_id = request.form['author_id']
@@ -79,10 +85,6 @@ def open_metod(metod_id):
                 metod_id=metod.id
             ).delete()
 
-        #print("1111111111111111111111")
-        #print(uploaded_file)
-        #print(uploaded_file.mimetype)
-        #print(uploaded_file.read())
         db.session.commit()
 
         return redirect(url_for("open_metod", metod_id=metod_id))
@@ -164,7 +166,6 @@ def delete_metod(metod_id):
 @app.route('/open_metod/<int:metod_id>/file/<filename>', methods=['GET', 'POST'])
 def get_file(metod_id, filename):
     metod = Methodichka.query.get_or_404(metod_id)
-    print(metod.filename)
     return send_file(
         io.BytesIO(metod.file_data),
         mimetype=metod.mime_type,
@@ -178,11 +179,7 @@ def login():
         login = request.form['login']
         password = request.form['password']
 
-        print(login, password)
-
         user = User.query.filter_by(login=login).first()
-
-        print(user)
 
         if user and user.password == password:
             session["user_id"] = user.id
@@ -200,9 +197,7 @@ def logout():
 def get_current_user():
     user_id = session.get("user_id")
     if user_id:
-        print('userid', user_id)
         return User.query.get(user_id)
-    print('нет никого')
     return None
 
 @app.context_processor
