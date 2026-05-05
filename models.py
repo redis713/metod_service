@@ -41,7 +41,7 @@ class Methodichka(db.Model):
     number_theme = db.Column(db.String(255), nullable=False)
 
     # Название темы
-    title = db.Column(db.String(255), nullable=False)
+    title = db.Column(db.String(1055), nullable=False)
 
     # Автор темы
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
@@ -50,7 +50,7 @@ class Methodichka(db.Model):
     recenzent_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     # Имя файла
-    filename = db.Column(db.String(255), nullable=False)
+    filename = db.Column(db.String(1055), nullable=False)
 
     # MIME тип
     mime_type = db.Column(
